@@ -1,0 +1,108 @@
+<form class="p-6 max-w-7xl mx-auto">
+  <!-- Form Header -->
+  <div class="text-center">
+    <h1 class="font-bold text-2xl">Book An Carwashing Appointment</h1>
+    <p class="text-sm text-gray-400">
+      Car washes can self-service,fully automated service with all cleaning options.
+    </p>
+  </div>
+  <!-- WashList Array -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 my-6">
+    @for (wash of washList(); track wash.id) {
+      <div
+        class="flex relative flex-col items-center justify-center cursor-pointer p-6 rounded-xl border transition-all duration-200"
+        [class]="
+          selectedWash().washType === wash.washType
+            ? 'bg-blue-500 text-white border-blue-500'
+            : 'bg-white text-blue-500 border-gray-200'
+        "
+        (click)="selectWashFn(wash)"
+      >
+        <span class="material-icons text-6xl mb-2"> {{ wash.icon }} </span>
+        <span class="text-lg font-medium text-center"> {{ wash.washType }} </span>
+        @if (selectedWash().washType === wash.washType) {
+          <span class="material-icons absolute top-2 right-2 text-white text-lg">
+            check_circle
+          </span>
+        }
+      </div>
+    }
+  </div>
+  <!-- Form -->
+  <div class="md:grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- // Name Input // -->
+    <div class="relative mb-10">
+      <div class="relative">
+        <p class="form-label">Name</p>
+        <input placeholder="Name" type="text" class="form-input" />
+      </div>
+    </div>
+    <!-- // Phone Input // -->
+    <div class="relative mb-10">
+      <div class="relative">
+        <p class="form-label">phone</p>
+        <input placeholder="Phone number" type="tel" class="form-input" />
+      </div>
+    </div>
+    <!-- // Vehicle Input // -->
+    <div class="relative mb-5">
+      <div class="relative">
+        <p class="form-label">Vehicle</p>
+        <input placeholder="Your vehicle" type="text" class="form-input" />
+      </div>
+    </div>
+    <!-- // Date Input // -->
+    <div class="relative mb-5">
+      <mat-form-field appearance="outline" class="w-full md:mt-2!">
+        <mat-label>Choose a date</mat-label>
+        <input matInput [min]="today" [matDatepicker]="datepicker" />
+        <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+        <mat-datepicker #datepicker>
+          <mat-datepicker-actions>
+            <button matButton matDatepickerCancel>Cancel</button>
+            <button matButton="elevated" matDatepickerApply>Apply</button>
+          </mat-datepicker-actions>
+        </mat-datepicker>
+      </mat-form-field>
+    </div>
+    <!-- // Image Input // -->
+    <div class="relative col-span-2 mb-5">
+      <p class="form-label" for="file_input">Upload file</p>
+      <div
+        class="flex items-center gap-4 border border-gray-300 rounded-md px-4 py-3 mt-2 transition-colors bg-white"
+      >
+        <label
+          for="file_input"
+          class="cursor-pointer px-4 py-2 rounded-md bg-gray-300 text-sm font-medium"
+        >
+          Choose file
+        </label>
+        <span id="file_name" class="text-gray-500 text-sm truncate max-w-xs"> No file chosen </span>
+      </div>
+      <input
+        type="file"
+        id="file_input"
+        class="hidden"
+        onchange="
+          document.getElementById('file_name').textContent = this.files[0]?.name || 'No file chosen'
+        "
+      />
+    </div>
+    <!-- // Description Input // -->
+    <div class="relative col-span-2">
+      <div class="relative">
+        <p class="form-label">Additional message</p>
+        <textarea
+          rows="4"
+          placeholder="Any additional notes about your car or service..."
+          class="form-input resize-none"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="text-center">
+    <button matButton="filled" class="mt-6 w-full px-10 py-3 rounded-xl text-lg text-center">
+      Submit
+    </button>
+  </div>
+</form>

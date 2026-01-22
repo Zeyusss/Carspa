@@ -1,0 +1,43 @@
+<section class="style-container p-6 bg-white rounded-xl space-y-4">
+  <!-- Breadcrumb -->
+  <span class="text-xs text-gray-400 uppercase tracking-wide">
+    Appointments / {{ today | date: 'EEEE' }}
+  </span>
+
+  <!-- Header -->
+  <div>
+    <h1 class="text-3xl font-semibold text-blue-800">Welcome to Carspa</h1>
+    <span class="text-base text-gray-500 block mt-1 ms-1"> More Shine. Less Time. </span>
+  </div>
+
+  <!-- Info Card -->
+  <div
+    class="flex items-center justify-around bg-gray-50 border border-gray-100 rounded-xl p-5 text-center transition-all duration-200 hover:shadow-lg"
+  >
+    <!-- Date -->
+    <div class="flex flex-col items-center space-y-1">
+      <span class="text-gray-400 text-sm">Date</span>
+      <span class="font-semibold">
+        {{ today | date: 'EEEE, MMM d' }}
+      </span>
+    </div>
+
+    <!-- Time -->
+    <div class="flex flex-col items-center space-y-1">
+      <span class="text-gray-400 text-sm">Time</span>
+      <span class="font-semibold">24/7</span>
+    </div>
+
+    <!-- Room -->
+    <div class="flex flex-col items-center space-y-1">
+      <span class="text-gray-400 text-sm">Room</span>
+      <span class="font-semibold">Room 1</span>
+    </div>
+
+    <!-- Capacity -->
+    <div class="flex flex-col items-center space-y-1">
+      <span class="text-gray-400 text-sm">Capacity</span>
+      <span class="font-semibold">3 of 10</span>
+    </div>
+  </div>
+</section>
