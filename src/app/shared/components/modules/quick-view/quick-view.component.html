@@ -1,0 +1,57 @@
+<h2 mat-dialog-title class="text-2xl font-bold text-gray-800 border-b pb-3">Participant Details</h2>
+<mat-dialog-content class="flex flex-col gap-4 mt-4">
+  <!-- Vehicle Image -->
+  @if (data.element.img) {
+    <div class="w-full my-3 h-56 rounded-lg overflow-hidden shadow-lg">
+      <img [src]="data.element.img" alt="Vehicle" class="w-full h-full object-cover" />
+    </div>
+  }
+
+  <!-- Info Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm flex flex-col">
+      <span class="text-gray-500 text-sm">Full ID</span>
+      <span class="text-gray-900 font-medium">{{ data.element.id }}</span>
+    </div>
+
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm flex flex-col">
+      <span class="text-gray-500 text-sm">Name</span>
+      <span class="text-gray-900 font-medium">{{ data.element.name }}</span>
+    </div>
+
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm flex flex-col">
+      <span class="text-gray-500 text-sm">Vehicle</span>
+      <span class="text-gray-900 font-medium">{{ data.element.vehicle }}</span>
+    </div>
+
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm flex flex-col">
+      <span class="text-gray-500 text-sm">Date</span>
+      <span class="text-gray-900 font-medium">{{ data.element.date }}</span>
+    </div>
+
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm flex flex-col">
+      <span class="text-gray-500 text-sm">Wash Type</span>
+      <span class="text-gray-900 font-medium">{{ data.element.washType?.washType }}</span>
+    </div>
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm flex flex-col">
+      <span class="text-gray-500 text-sm">Phone</span>
+      <span class="text-gray-900 font-medium">{{ data.element.phone }}</span>
+    </div>
+
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm flex flex-col col-span-1 sm:col-span-2">
+      <span class="text-gray-500 text-sm">Description</span>
+      <span class="text-gray-900 font-medium">{{ data.element.description || '-' }}</span>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="mt-4">
+  <button
+    mat-raised-button
+    color="primary"
+    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 cursor-pointer rounded-lg"
+    (click)="close()"
+  >
+    Close
+  </button>
+</mat-dialog-actions>

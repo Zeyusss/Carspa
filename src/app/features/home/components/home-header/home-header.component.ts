@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CarspaStore } from '../../../../core/store/store';
 
 @Component({
   selector: 'app-home-header',
@@ -8,5 +9,6 @@ import { Component } from '@angular/core';
   styleUrl: './home-header.component.css',
 })
 export class HomeHeaderComponent {
+  readonly store = inject(CarspaStore);
   today = new Date();
 }

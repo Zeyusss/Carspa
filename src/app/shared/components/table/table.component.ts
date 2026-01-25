@@ -1,5 +1,5 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, inject, ViewChild } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import {
   MatTableDataSource,
@@ -8,17 +8,16 @@ import {
   MatHeaderRowDef,
   MatRowDef,
 } from '@angular/material/table';
-import { carspaData } from '../../data/dumpData';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
+import { CarspaStore } from '../../../core/store/store';
+import { MatDialog } from '@angular/material/dialog';
+import { AlertModuleComponent } from '../modules/alert-module/alert-module.component';
+import { BookingInterface } from '../../../core/models/booking/booking.interface';
+import { AppointmentModuleComponent } from '../modules/appointment-module/appointment-module.component';
+import { QuickViewComponent } from '../modules/quick-view/quick-view.component';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
 @Component({
   selector: 'app-table',
   imports: [
@@ -35,9 +34,17 @@ export interface PeriodicElement {
 })
 export class TableComponent implements AfterViewInit {
   private _liveAnnouncer = inject(LiveAnnouncer);
+  readonly dialog = inject(MatDialog);
+  private readonly store = inject(CarspaStore);
 
-  displayedColumns: string[] = ['id', 'name', 'vehicle', 'phone', 'date', 'actions'];
-  dataSource = new MatTableDataSource(carspaData);
+  displayedColumns: string[] = ['id', 'name', 'washType', 'date', 'actions'];
+
+  dataSource = new MatTableDataSource();
+  constructor() {
+    effect(() => {
+      this.dataSource.data = this.store.booking();
+    });
+  }
 
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -56,5 +63,30 @@ export class TableComponent implements AfterViewInit {
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
+  }
+
+  alertModal(element: BookingInterface) {
+    this.dialog.open(AlertModuleComponent, { data: { element } });
+  }
+  updateModal(element: BookingInterface) {
+    this.dialog.open(AppointmentModuleComponent, {
+      maxHeight: '90vh',
+      maxWidth: '90vw',
+      width: 'auto',
+      height: 'auto',
+      autoFocus: false,
+      data: { element },
+    });
+  }
+
+  quickViewModal(element: BookingInterface) {
+    this.dialog.open(QuickViewComponent, {
+      maxHeight: '90vh',
+      maxWidth: '90vw',
+      width: 'auto',
+      height: 'auto',
+      autoFocus: false,
+      data: { element },
+    });
   }
 }

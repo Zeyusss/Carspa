@@ -1,7 +1,7 @@
-<form class="p-6 max-w-7xl mx-auto">
+<form class="p-6 max-w-7xl mx-auto" (submit)="onSubmit($event)">
   <!-- Form Header -->
   <div class="text-center">
-    <h1 class="font-bold text-2xl">Book An Carwashing Appointment</h1>
+    <h1 class="font-bold text-2xl">Book A Carwashing Appointment</h1>
     <p class="text-sm text-gray-400">
       Car washes can self-service,fully automated service with all cleaning options.
     </p>
@@ -12,7 +12,7 @@
       <div
         class="flex relative flex-col items-center justify-center cursor-pointer p-6 rounded-xl border transition-all duration-200"
         [class]="
-          selectedWash().washType === wash.washType
+          selectedWash()?.washType === wash.washType
             ? 'bg-blue-500 text-white border-blue-500'
             : 'bg-white text-blue-500 border-gray-200'
         "
@@ -20,7 +20,7 @@
       >
         <span class="material-icons text-6xl mb-2"> {{ wash.icon }} </span>
         <span class="text-lg font-medium text-center"> {{ wash.washType }} </span>
-        @if (selectedWash().washType === wash.washType) {
+        @if (selectedWash()?.washType === wash.washType) {
           <span class="material-icons absolute top-2 right-2 text-white text-lg">
             check_circle
           </span>
@@ -34,28 +34,61 @@
     <div class="relative mb-10">
       <div class="relative">
         <p class="form-label">Name</p>
-        <input placeholder="Name" type="text" class="form-input" />
+        <input
+          placeholder="Name"
+          [formField]="signalForm.name"
+          type="text"
+          class="form-input"
+          [class]="
+            this.signalForm.name().invalid() && this.signalForm.name().touched()
+              ? 'border border-red-600'
+              : 'border border-gray-300'
+          "
+        />
       </div>
+      <app-form-error [control]="this.signalForm.name()" />
     </div>
     <!-- // Phone Input // -->
     <div class="relative mb-10">
       <div class="relative">
         <p class="form-label">phone</p>
-        <input placeholder="Phone number" type="tel" class="form-input" />
+        <input
+          placeholder="Phone number"
+          [formField]="signalForm.phone"
+          type="tel"
+          class="form-input"
+          [class]="
+            this.signalForm.vehicle().invalid() && this.signalForm.vehicle().touched()
+              ? 'border border-red-600'
+              : 'border border-gray-300'
+          "
+        />
       </div>
+      <app-form-error [control]="this.signalForm.phone()" />
     </div>
     <!-- // Vehicle Input // -->
-    <div class="relative mb-5">
+    <div class="relative mb-10">
       <div class="relative">
         <p class="form-label">Vehicle</p>
-        <input placeholder="Your vehicle" type="text" class="form-input" />
+        <input
+          placeholder="Your vehicle"
+          type="text"
+          [formField]="signalForm.vehicle"
+          class="form-input"
+          [class]="
+            this.signalForm.vehicle().invalid() && this.signalForm.vehicle().touched()
+              ? 'border border-red-600'
+              : 'border border-gray-300'
+          "
+        />
       </div>
+      <app-form-error [control]="this.signalForm.vehicle()" />
     </div>
     <!-- // Date Input // -->
-    <div class="relative mb-5">
-      <mat-form-field appearance="outline" class="w-full md:mt-2!">
+    <div class="relative mb-10">
+      <mat-form-field subscriptSizing="dynamic" appearance="outline" class="w-full md:mt-2! mb-0!">
         <mat-label>Choose a date</mat-label>
-        <input matInput [min]="today" [matDatepicker]="datepicker" />
+        <input matInput [min]="today" [formField]="signalForm.date" [matDatepicker]="datepicker" />
         <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
         <mat-datepicker #datepicker>
           <mat-datepicker-actions>
@@ -64,6 +97,7 @@
           </mat-datepicker-actions>
         </mat-datepicker>
       </mat-form-field>
+      <app-form-error [control]="this.signalForm.date()" />
     </div>
     <!-- // Image Input // -->
     <div class="relative col-span-2 mb-5">
@@ -77,12 +111,16 @@
         >
           Choose file
         </label>
-        <span id="file_name" class="text-gray-500 text-sm truncate max-w-xs"> No file chosen </span>
+        <span id="file_name" class="text-gray-500 text-sm truncate max-w-xs">
+          {{ saveImgFile() || 'No file chosen' }}
+        </span>
       </div>
       <input
         type="file"
         id="file_input"
         class="hidden"
+        accept="image/png,image/jpeg,image/webp"
+        (change)="changeImage($event)"
         onchange="
           document.getElementById('file_name').textContent = this.files[0]?.name || 'No file chosen'
         "
@@ -96,13 +134,26 @@
           rows="4"
           placeholder="Any additional notes about your car or service..."
           class="form-input resize-none"
+          [formField]="signalForm.description"
+          [class]="
+            this.signalForm.vehicle().invalid() && this.signalForm.vehicle().touched()
+              ? 'border border-red-600'
+              : 'border border-gray-300'
+          "
         ></textarea>
       </div>
     </div>
   </div>
   <div class="text-center">
-    <button matButton="filled" class="mt-6 w-full px-10 py-3 rounded-xl text-lg text-center">
-      Submit
+    <button
+      [disabled]="!inEditMode() && !store.capacity()"
+      matButton="filled"
+      class="mt-6 w-full px-10 py-3 rounded-xl text-lg text-center"
+    >
+      {{ inEditMode() ? 'Update Appointment' : 'Take Appointment' }}
     </button>
+    @if (!inEditMode() && !this.store.capacity()) {
+      <p class="text-red-500 text-sm mt-2">Maximum appointments reached</p>
+    }
   </div>
 </form>

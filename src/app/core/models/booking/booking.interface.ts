@@ -1,11 +1,12 @@
-interface BookingInterface {
-  id: number;
+export interface BookingInterface {
+  id?: string;
   name: string;
   phone: string;
-  washType: WashType;
+  washType: WashType | undefined;
   vehicle: string;
   date: string;
   description: string;
+  img?: string | null;
 }
 
 interface WashType {
